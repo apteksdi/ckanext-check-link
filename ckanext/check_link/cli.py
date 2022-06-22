@@ -40,7 +40,7 @@ def check_packages(include_draft: bool, include_private: bool, ids: tuple[str, .
         q = q.filter(model.Package.private == False)
 
     if ids:
-        q = q.filter(model.Package.id.in_(ids))
+        q = q.filter(model.Package.id.in_(ids) | model.Package.name.in_(ids))
 
     with click.progressbar(q, length=q.count()) as bar:
         for pkg in bar:

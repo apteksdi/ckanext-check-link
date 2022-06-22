@@ -10,7 +10,17 @@ Provides API, CLI commands, and views for:
 * checking availability of any arbitrary link.
 * storing results of these checks
 * visualizing stored results
-* downloading a report based on the stored results
+
+<!-- * downloading a report based on the stored results -->
+
+### Index
+
+* [Requirements](#requirements)
+* [Installation](#installation)
+* [Config settings](#config-settings)
+* [UI](#ui)
+* [CLI](#cli)
+* [API](#api)
 
 ## Requirements
 
@@ -38,7 +48,56 @@ Compatibility with core CKAN versions:
 # thus disabled by default.
 # (optional, default: false).
 ckanext.check_link.user_can_check_url = yes
+
+# URL for the "Link availability" page.
+# (optional, default: /check-link/report/global)
+ckanext.check_link.report.base_template = /ckan-admin/link-state
+
+# A base template that is extended by the "Link availability" page.
+# (optional, default: check_link/base_admin.html)
+ckanext.check_link.report.base_template = check_link/base.html
+
 ```
+
+## UI
+
+### Link availability
+#### Endpoint: `check_link.report`
+#### Path: `/check-link/report/global`
+
+Paginated listing of all the "broken" links. Access is controlled by the
+`check_link_view_report_page` auth function, which can be bypassed only by
+sysadmin.
+
+## CLI
+
+CLI commands are registered under `ckan check-link` route.
+
+
+### `check-packages`
+
+Check every resource inside each package.
+
+The scope can be narrowed via arbitrary number of arguments, specifying the package's ID or name.
+
+```sh
+# check all the public packages
+$ ckan check-link check-packages
+
+# check all the active packages
+$ ckan check-link check-packages --include-private
+
+# check all the public and draft pacakges
+$ ckan check-link check-packages --include-draft
+
+# check only two specified packages
+$ ckan check-link check-packages pkg-id-one pkg-name-two
+
+```
+
+## API
+
+TBA
 
 ## License
 
