@@ -1,5 +1,6 @@
 from __future__ import annotations
-from typing import Any
+
+from typing import Any, Iterable
 from itertools import islice
 from check_link import Link, check_all
 
@@ -37,7 +38,7 @@ def url_check(context, data_dict):
     ]
 
     if data_dict["save"]:
-        _save_reports(context, reports)
+        _save_reports(context, reports, data_dict["clear_available"])
 
     return reports
 
@@ -55,7 +56,7 @@ def resource_check(context, data_dict):
     report = dict(result[0], resource_id=resource["id"], package_id=resource["package_id"])
 
     if data_dict["save"]:
-        _save_reports(context, [report])
+        _save_reports(context, [report], data_dict["clear_available"])
 
     return report
 
@@ -68,7 +69,7 @@ def package_check(context, data_dict):
         context,
         "res_url:* (id:{0} OR name:{0})".format(solr_literal(data_dict["id"])),
         data_dict,
-    )
+    )["reports"]
 
 
 @action
@@ -80,7 +81,7 @@ def organization_check(context, data_dict):
         context,
         "res_url:* owner_org:{}".format(solr_literal(data_dict["id"])),
         data_dict,
-    )
+    )["reports"]
 
 
 @action
@@ -90,7 +91,7 @@ def group_check(context, data_dict):
 
     return _search_check(
         context, "res_url:* groups:{}".format(solr_literal(data_dict["id"])), data_dict
-    )
+    )["reports"]
 
 
 @action
@@ -102,7 +103,7 @@ def user_check(context, data_dict):
         context,
         "res_url:* creator_user_id:{}".format(solr_literal(data_dict["id"])),
         data_dict,
-    )
+    )["reports"]
 
 
 @action
@@ -110,7 +111,7 @@ def user_check(context, data_dict):
 def search_check(context, data_dict):
     tk.check_access("check_link_search_check", context, data_dict)
 
-    return _search_check(context, data_dict["fq"], data_dict)
+    return _search_check(context, data_dict["fq"], data_dict)["reports"]
 
 
 def _search_check(context, fq: str, data_dict: dict[str, Any]):
@@ -127,8 +128,10 @@ def _search_check(context, fq: str, data_dict: dict[str, Any]):
         for pkg in islice(_iterate_search(context, params), data_dict["rows"])
         for res in pkg["resources"]
     ]
+
     if not pairs:
-        return []
+        return {"reports", []}
+
     patches, urls = zip(*pairs)
 
     result = tk.get_action("check_link_url_check")(
@@ -137,9 +140,11 @@ def _search_check(context, fq: str, data_dict: dict[str, Any]):
 
     reports = [dict(report, **patch) for patch, report in zip(patches, result)]
     if data_dict["save"]:
-        _save_reports(context, reports)
+        _save_reports(context, reports, data_dict["clear_available"])
 
-    return reports
+    return {
+        "reports": reports,
+    }
 
 
 def _iterate_search(context, params: dict[str, Any]):
@@ -155,7 +160,15 @@ def _iterate_search(context, params: dict[str, Any]):
         params["start"] += len(pack["results"])
 
 
-def _save_reports(context, reports):
+def _save_reports(context, reports: Iterable[dict[str, Any]], clear: bool):
         save = tk.get_action("check_link_report_save")
+        delete = tk.get_action("check_link_report_delete")
+
         for report in reports:
-            save(context.copy(), report)
+            if clear and report["state"] == "available":
+                try:
+                    delete(context.copy(), report)
+                except tk.ObjectNotFound:
+                    pass
+            else:
+                save(context.copy(), report)

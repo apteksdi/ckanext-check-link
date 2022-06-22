@@ -67,6 +67,13 @@ def report_search(context, data_dict):
     if data_dict["attached_only"]:
         q = q.filter(Report.resource_id.isnot(None))
 
+    if "exclude_state" in data_dict:
+        q = q.filter(Report.state.notin_(data_dict["exclude_state"]))
+
+    if "include_state" in data_dict:
+        q = q.filter(Report.state.in_(data_dict["include_state"]))
+
+
     count = q.count()
     q = q.limit(data_dict["limit"]).offset(data_dict["offset"])
 
@@ -85,6 +92,7 @@ def report_search(context, data_dict):
 def report_delete(context, data_dict):
     tk.check_access("check_link_report_delete", context, data_dict)
     sess = context["session"]
+
     report = tk.get_action("check_link_report_show")(context, data_dict)
     entity = sess.query(Report).filter(Report.id == report["id"]).one()
 

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from flask import Blueprint
 import ckan.plugins.toolkit as tk
+import ckan.authz as authz
 from ckan.lib.helpers import Page
 
 CONFIG_BASE_TEMPLATE = "ckanext.check_link.report.base_template"
@@ -23,6 +24,9 @@ def get_blueprints():
 
 
 def report():
+    if not authz.is_authorized_boolean("check_link_view_report_page", {"user": tk.g.user}, {}):
+        return tk.abort(403)
+
     try:
         page = max(1, tk.asint(tk.request.args.get("page", 1)))
     except ValueError:
@@ -33,9 +37,10 @@ def report():
         "limit": per_page,
         "offset": per_page * page - per_page,
         "attached_only": True,
+        "exclude_state": ["available"]
     })
 
-    base_template = tk.config_get(
+    base_template = tk.config.get(
         CONFIG_BASE_TEMPLATE,
         DEFAULT_BASE_TEMPLATE
     )
