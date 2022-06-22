@@ -1,11 +1,6 @@
 from __future__ import annotations
-from typing import Any
-
-from check_link import Link, check_all
-
 import ckan.plugins.toolkit as tk
 from ckan.logic import validate
-from ckan.lib.search.query import solr_literal
 
 from ckanext.toolbelt.decorators import Collector
 
@@ -21,12 +16,12 @@ action, get_actions = Collector("check_link").split()
 def report_save(context, data_dict):
     tk.check_access("check_link_report_save", context, data_dict)
     sess = context["session"]
-    data_dict["details"].update(data_dict.get("__extras", {}))
+    data_dict["details"].update(data_dict.pop("__extras", {}))
 
     try:
         existing = tk.get_action("check_link_report_show")(context, data_dict)
     except tk.ObjectNotFound:
-        report = Report({**data_dict, "id": None})
+        report = Report(**{**data_dict, "id": None})
         sess.add(report)
     else:
         report = sess.query(Report).filter(Report.id == existing["id"]).one()
@@ -61,6 +56,19 @@ def report_show(context, data_dict):
 @validate(schema.report_search)
 def report_search(context, data_dict):
     tk.check_access("check_link_report_search", context, data_dict)
+    q = context["session"].query(Report)
+
+
+    count = q.count()
+    q = q.limit(data_dict["limit"]).offset(data_dict["offset"])
+
+    return {
+        "count": count,
+        "results": [
+            r.dictize(dict(context, include_resource=True, include_package=True))
+            for r in q
+        ]
+    }
 
 
 
@@ -74,4 +82,4 @@ def report_delete(context, data_dict):
 
     sess.delete(entity)
     sess.commit()
-    return report.dictize(context)
+    return entity.dictize(context)

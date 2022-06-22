@@ -21,6 +21,7 @@ def upgrade():
         "check_link_report",
         sa.Column("id", sa.UnicodeText, primary_key=True),
         sa.Column("url", sa.UnicodeText),
+        sa.Column("state", sa.String(20), nullable=False),
         sa.Column(
             "created_at",
             sa.DateTime,
@@ -36,6 +37,7 @@ def upgrade():
         ),
         sa.Column("details", JSONB, nullable=False),
         sa.Index("url_idx", "url"),
+        sa.UniqueConstraint("url", "resource_id"),
     )
 
 

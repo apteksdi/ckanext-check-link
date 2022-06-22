@@ -31,12 +31,12 @@ def url_check(context, data_dict):
             "state": link.state.name,
             "code": link.code,
             "reason": link.reason,
-            "details": link.details,
+            "explanation": link.details,
         }
         for link in result
     ]
 
-    if data_dict["save_report"]:
+    if data_dict["save"]:
         _save_reports(context, reports)
 
     return reports
@@ -52,9 +52,9 @@ def resource_check(context, data_dict):
         context, {"url": [resource["url"]]}
     )
 
-    report = dict(result[0], id=resource["id"], package_id=resource["package_id"])
+    report = dict(result[0], resource_id=resource["id"], package_id=resource["package_id"])
 
-    if data_dict["save_report"]:
+    if data_dict["save"]:
         _save_reports(context, [report])
 
     return report
@@ -123,7 +123,7 @@ def _search_check(context, fq: str, data_dict: dict[str, Any]):
     }
 
     pairs = [
-        ({"id": res["id"], "package_id": pkg["id"]}, res["url"])
+        ({"resource_id": res["id"], "package_id": pkg["id"]}, res["url"])
         for pkg in islice(_iterate_search(context, params), data_dict["rows"])
         for res in pkg["resources"]
     ]
@@ -136,7 +136,7 @@ def _search_check(context, fq: str, data_dict: dict[str, Any]):
     )
 
     reports = [dict(report, **patch) for patch, report in zip(patches, result)]
-    if data_dict["save_report"]:
+    if data_dict["save"]:
         _save_reports(context, reports)
 
     return reports

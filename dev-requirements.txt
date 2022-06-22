@@ -1,0 +1,5 @@
+pytest-ckan
+pytest-factoryboy
+responses
+aioresponses
+pytest-asyncio

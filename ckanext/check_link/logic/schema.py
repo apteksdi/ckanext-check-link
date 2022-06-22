@@ -12,7 +12,7 @@ def url_check(
     return {
         "url": [not_missing, json_list_or_string],
         "patch": [default("{}"), convert_to_json_if_string],
-        "save_report": [default(False), boolean_validator],
+        "save": [default(False), boolean_validator],
     }
 
 
@@ -20,14 +20,14 @@ def url_check(
 def resource_check(not_missing, resource_id_exists, boolean_validator, default):
     return {
         "id": [not_missing, resource_id_exists],
-        "save_report": [default(False), boolean_validator],
+        "save": [default(False), boolean_validator],
     }
 
 
 @validator_args
 def base_search_check(boolean_validator, default, int_validator):
     return {
-        "save_report": [default(False), boolean_validator],
+        "save": [default(False), boolean_validator],
         "include_drafts": [default(False), boolean_validator],
         "include_deleted": [default(False), boolean_validator],
         "include_private": [default(False), boolean_validator],
@@ -66,6 +66,7 @@ def report_save(unicode_safe, resource_id_exists, ignore_missing, not_missing, d
     return {
         "id": [ignore_missing, unicode_safe],
         "url": [not_missing, unicode_safe],
+        "state": [not_missing, unicode_safe],
         "resource_id": [ignore_missing, resource_id_exists],
         "details": [default("{}"), convert_to_json_if_string],
     }
@@ -81,8 +82,11 @@ def report_show(unicode_safe, ignore_missing, resource_id_exists):
 
 
 @validator_args
-def report_search(unicode_safe, default):
-    return {}
+def report_search(unicode_safe, default, int_validator):
+    return {
+        "limit": [default(10), int_validator],
+        "offset": [default(0), int_validator],
+    }
 
 
 @validator_args
