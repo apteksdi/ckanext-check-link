@@ -82,10 +82,12 @@ def report_show(unicode_safe, ignore_missing, resource_id_exists):
 
 
 @validator_args
-def report_search(unicode_safe, default, int_validator):
+def report_search(unicode_safe, default, int_validator, boolean_validator):
     return {
         "limit": [default(10), int_validator],
         "offset": [default(0), int_validator],
+        "attached_only": [default(False), boolean_validator],
+        "free_only": [default(False), boolean_validator],
     }
 
 

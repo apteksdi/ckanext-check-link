@@ -4,12 +4,13 @@ import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 
 from .logic import action, auth
-
+from . import views
 
 class CheckLinkPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IActions)
     plugins.implements(plugins.IAuthFunctions)
+    plugins.implements(plugins.IBlueprint)
 
     # IConfigurer
 
@@ -25,3 +26,8 @@ class CheckLinkPlugin(plugins.SingletonPlugin):
     # IAuthFunctions
     def get_auth_functions(self):
         return auth.get_auth_functions()
+
+
+    # IBlueprint
+    def get_blueprint(self):
+        return views.get_blueprints()

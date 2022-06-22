@@ -58,6 +58,14 @@ def report_search(context, data_dict):
     tk.check_access("check_link_report_search", context, data_dict)
     q = context["session"].query(Report)
 
+    if data_dict["free_only"] and data_dict["attached_only"]:
+        raise tk.ValidationError({"free_only": ["Filters `attached_only` and `free_only` cannot be applied simultaneously"]})
+
+    if data_dict["free_only"]:
+        q = q.filter(Report.resource_id.is_(None))
+
+    if data_dict["attached_only"]:
+        q = q.filter(Report.resource_id.isnot(None))
 
     count = q.count()
     q = q.limit(data_dict["limit"]).offset(data_dict["offset"])

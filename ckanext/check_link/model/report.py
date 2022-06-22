@@ -50,10 +50,10 @@ class Report(Base):
     def dictize(self, context: dict[str, Any]) -> dict[str, Any]:
         result = table_dictize(self, context, package_id=self.package_id)
 
-        if context.get("include_resource"):
+        if context.get("include_resource") and self.resource_id:
             result["details"]["resource"] = resource_dictize(self.resource, context)
 
-        if context.get("include_package"):
+        if context.get("include_package") and self.package_id:
             result["details"]["package"] = resource_dictize(self.package, context)
 
         return result
