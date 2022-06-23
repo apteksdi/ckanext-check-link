@@ -13,7 +13,7 @@ from sqlalchemy import (
     ForeignKey,
     UnicodeText,
     UniqueConstraint,
-    String
+    String,
 )
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import backref, relationship
@@ -32,7 +32,9 @@ class Report(Base):
 
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
 
-    resource_id = Column(UnicodeText, ForeignKey(model.Resource.id), nullable=True, unique=True)
+    resource_id = Column(
+        UnicodeText, ForeignKey(model.Resource.id), nullable=True, unique=True
+    )
 
     details = Column(JSONB, nullable=False, default=dict)
 
@@ -41,9 +43,10 @@ class Report(Base):
 
     resource = relationship(
         model.Resource,
-        backref=backref("check_link_report", cascade="all, delete-orphan", uselist=False),
+        backref=backref(
+            "check_link_report", cascade="all, delete-orphan", uselist=False
+        ),
     )
-
 
     UniqueConstraint(url, resource_id)
 
@@ -63,13 +66,12 @@ class Report(Base):
         if not id_:
             return
 
-        return model.Session.query(cls).filter(
-            cls.resource_id == id_
-        ).one_or_none()
+        return model.Session.query(cls).filter(cls.resource_id == id_).one_or_none()
 
     @classmethod
     def by_url(cls, url: str) -> Optional[Self]:
-        return model.Session.query(cls).filter(
-            cls.resource_id.is_(None),
-            cls.url == url
-        ).one_or_none()
+        return (
+            model.Session.query(cls)
+            .filter(cls.resource_id.is_(None), cls.url == url)
+            .one_or_none()
+        )

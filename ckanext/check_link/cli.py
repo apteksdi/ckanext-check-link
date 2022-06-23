@@ -15,8 +15,12 @@ def check_link():
 
 
 @check_link.command()
-@click.option("-d", "--include-draft", is_flag=True, help="Check draft packages as well")
-@click.option("-p", "--include-private", is_flag=True, help="Check private packages as well")
+@click.option(
+    "-d", "--include-draft", is_flag=True, help="Check draft packages as well"
+)
+@click.option(
+    "-p", "--include-private", is_flag=True, help="Check private packages as well"
+)
 @click.argument("ids", nargs=-1)
 def check_packages(include_draft: bool, include_private: bool, ids: tuple[str, ...]):
     """Check every resource inside each package.

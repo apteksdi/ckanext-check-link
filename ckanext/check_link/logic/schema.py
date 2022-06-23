@@ -65,7 +65,14 @@ def search_check(unicode_safe, default):
 
 
 @validator_args
-def report_save(unicode_safe, resource_id_exists, ignore_missing, not_missing, default, convert_to_json_if_string):
+def report_save(
+    unicode_safe,
+    resource_id_exists,
+    ignore_missing,
+    not_missing,
+    default,
+    convert_to_json_if_string,
+):
     return {
         "id": [ignore_missing, unicode_safe],
         "url": [not_missing, unicode_safe],
@@ -85,7 +92,9 @@ def report_show(unicode_safe, ignore_missing, resource_id_exists):
 
 
 @validator_args
-def report_search(ignore_empty, default, int_validator, boolean_validator, json_list_or_string):
+def report_search(
+    ignore_empty, default, int_validator, boolean_validator, json_list_or_string
+):
     return {
         "limit": [default(10), int_validator],
         "offset": [default(0), int_validator],

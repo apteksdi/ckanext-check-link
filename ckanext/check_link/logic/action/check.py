@@ -49,11 +49,11 @@ def resource_check(context, data_dict):
     tk.check_access("check_link_resource_check", context, data_dict)
     resource = tk.get_action("resource_show")(context, data_dict)
 
-    result = tk.get_action("check_link_url_check")(
-        context, {"url": [resource["url"]]}
-    )
+    result = tk.get_action("check_link_url_check")(context, {"url": [resource["url"]]})
 
-    report = dict(result[0], resource_id=resource["id"], package_id=resource["package_id"])
+    report = dict(
+        result[0], resource_id=resource["id"], package_id=resource["package_id"]
+    )
 
     if data_dict["save"]:
         _save_reports(context, [report], data_dict["clear_available"])
@@ -134,9 +134,7 @@ def _search_check(context, fq: str, data_dict: dict[str, Any]):
 
     patches, urls = zip(*pairs)
 
-    result = tk.get_action("check_link_url_check")(
-        context, {"url": urls}
-    )
+    result = tk.get_action("check_link_url_check")(context, {"url": urls})
 
     reports = [dict(report, **patch) for patch, report in zip(patches, result)]
     if data_dict["save"]:
@@ -161,14 +159,14 @@ def _iterate_search(context, params: dict[str, Any]):
 
 
 def _save_reports(context, reports: Iterable[dict[str, Any]], clear: bool):
-        save = tk.get_action("check_link_report_save")
-        delete = tk.get_action("check_link_report_delete")
+    save = tk.get_action("check_link_report_save")
+    delete = tk.get_action("check_link_report_delete")
 
-        for report in reports:
-            if clear and report["state"] == "available":
-                try:
-                    delete(context.copy(), report)
-                except tk.ObjectNotFound:
-                    pass
-            else:
-                save(context.copy(), report)
+    for report in reports:
+        if clear and report["state"] == "available":
+            try:
+                delete(context.copy(), report)
+            except tk.ObjectNotFound:
+                pass
+        else:
+            save(context.copy(), report)

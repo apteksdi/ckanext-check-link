@@ -33,24 +33,34 @@ def report_save(context, data_dict):
     sess.commit()
 
     return report.dictize(context)
+
+
 @action
 @validate(schema.report_show)
 def report_show(context, data_dict):
     tk.check_access("check_link_report_show", context, data_dict)
 
     if "id" in data_dict:
-        report = context["session"].query(Report).filter(Report.id == data_dict["id"]).one_or_none()
+        report = (
+            context["session"]
+            .query(Report)
+            .filter(Report.id == data_dict["id"])
+            .one_or_none()
+        )
     elif "resource_id" in data_dict:
         report = Report.by_resource_id(data_dict["resource_id"])
     elif "url" in data_dict:
         report = Report.by_url(data_dict["url"])
     else:
-        raise tk.ValidationError({"id": ["One of the following must be provided: id, resource_id, url"]})
+        raise tk.ValidationError(
+            {"id": ["One of the following must be provided: id, resource_id, url"]}
+        )
 
     if not report:
         raise tk.ObjectNotFound("Report not found")
 
     return report.dictize(context)
+
 
 @action
 @validate(schema.report_search)
@@ -59,7 +69,14 @@ def report_search(context, data_dict):
     q = context["session"].query(Report)
 
     if data_dict["free_only"] and data_dict["attached_only"]:
-        raise tk.ValidationError({"free_only": ["Filters `attached_only` and `free_only` cannot be applied simultaneously"]})
+        raise tk.ValidationError(
+            {
+                "free_only": [
+                    "Filters `attached_only` and `free_only` cannot be applied"
+                    " simultaneously"
+                ]
+            }
+        )
 
     if data_dict["free_only"]:
         q = q.filter(Report.resource_id.is_(None))
@@ -73,7 +90,6 @@ def report_search(context, data_dict):
     if "include_state" in data_dict:
         q = q.filter(Report.state.in_(data_dict["include_state"]))
 
-
     count = q.count()
     q = q.limit(data_dict["limit"]).offset(data_dict["offset"])
 
@@ -82,9 +98,8 @@ def report_search(context, data_dict):
         "results": [
             r.dictize(dict(context, include_resource=True, include_package=True))
             for r in q
-        ]
+        ],
     }
-
 
 
 @action

@@ -15,6 +15,7 @@ DEFAULT_REPORT_URL = "/check-link/report/global"
 
 bp = Blueprint("check_link", __name__)
 
+
 def get_blueprints():
     report_url = tk.config.get(CONFIG_REPORT_URL, DEFAULT_REPORT_URL)
     if report_url:
@@ -24,7 +25,9 @@ def get_blueprints():
 
 
 def report():
-    if not authz.is_authorized_boolean("check_link_view_report_page", {"user": tk.g.user}, {}):
+    if not authz.is_authorized_boolean(
+        "check_link_view_report_page", {"user": tk.g.user}, {}
+    ):
         return tk.abort(403)
 
     try:
@@ -33,19 +36,27 @@ def report():
         page = 1
 
     per_page = 10
-    reports = tk.get_action("check_link_report_search")({}, {
-        "limit": per_page,
-        "offset": per_page * page - per_page,
-        "attached_only": True,
-        "exclude_state": ["available"]
-    })
-
-    base_template = tk.config.get(
-        CONFIG_BASE_TEMPLATE,
-        DEFAULT_BASE_TEMPLATE
+    reports = tk.get_action("check_link_report_search")(
+        {},
+        {
+            "limit": per_page,
+            "offset": per_page * page - per_page,
+            "attached_only": True,
+            "exclude_state": ["available"],
+        },
     )
-    return tk.render("check_link/report.html", {
-        "base_template": base_template,
-        "page": Page(reports["results"], page=page, item_count=reports["count"], items_per_page=per_page, presliced_list=True)
 
-    })
+    base_template = tk.config.get(CONFIG_BASE_TEMPLATE, DEFAULT_BASE_TEMPLATE)
+    return tk.render(
+        "check_link/report.html",
+        {
+            "base_template": base_template,
+            "page": Page(
+                reports["results"],
+                page=page,
+                item_count=reports["count"],
+                items_per_page=per_page,
+                presliced_list=True,
+            ),
+        },
+    )
