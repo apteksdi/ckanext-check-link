@@ -1,10 +1,10 @@
 from __future__ import annotations
+
 import ckan.plugins.toolkit as tk
 from ckan.logic import validate
 
-from ckanext.toolbelt.decorators import Collector
-
 from ckanext.check_link.model import Report
+from ckanext.toolbelt.decorators import Collector
 
 from .. import schema
 

@@ -5,19 +5,19 @@ from typing import Any, Iterable, Optional
 
 import ckan.model as model
 from ckan.lib.dictization import table_dictize
-from ckan.lib.dictization.model_dictize import resource_dictize, package_dictize
+from ckan.lib.dictization.model_dictize import package_dictize, resource_dictize
 from ckan.model.types import make_uuid
 from sqlalchemy import (
     Column,
     DateTime,
     ForeignKey,
+    String,
     UnicodeText,
     UniqueConstraint,
-    String,
 )
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import backref, relationship
 from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.orm import backref, relationship
 from typing_extensions import Self
 
 from .base import Base

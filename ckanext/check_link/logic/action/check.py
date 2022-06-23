@@ -1,17 +1,16 @@
 from __future__ import annotations
 
-from typing import Any, Iterable
 from itertools import islice
-from check_link import Link, check_all
+from typing import Any, Iterable
 
 import ckan.plugins.toolkit as tk
-from ckan.logic import validate
+from check_link import Link, check_all
 from ckan.lib.search.query import solr_literal
+from ckan.logic import validate
 
 from ckanext.toolbelt.decorators import Collector
 
 from .. import schema
-
 
 action, get_actions = Collector("check_link").split()
 

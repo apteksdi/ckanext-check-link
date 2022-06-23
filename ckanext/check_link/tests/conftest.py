@@ -1,7 +1,7 @@
-import pytest
 import factory
+import pytest
+from ckan.tests.factories import CKANFactory, Resource, fake
 from pytest_factoryboy import register
-from ckan.tests.factories import CKANFactory, fake, Resource
 
 from ckanext.check_link.model import Report
 

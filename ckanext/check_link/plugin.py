@@ -3,8 +3,8 @@ from __future__ import annotations
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 
+from . import cli, views
 from .logic import action, auth
-from . import views, cli
 
 
 class CheckLinkPlugin(plugins.SingletonPlugin):

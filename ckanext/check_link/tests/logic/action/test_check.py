@@ -1,9 +1,8 @@
 from unittest.mock import ANY
-import pytest
-
-from aioresponses import aioresponses
 
 import ckan.plugins.toolkit as tk
+import pytest
+from aioresponses import aioresponses
 from ckan.tests.helpers import call_action
 
 

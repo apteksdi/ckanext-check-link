@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-import click
 import ckan.model as model
 import ckan.plugins.toolkit as tk
+import click
 
 
 def get_commands():

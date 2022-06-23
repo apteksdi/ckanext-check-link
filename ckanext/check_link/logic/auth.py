@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from ckan import authz
 import ckan.plugins.toolkit as tk
+from ckan import authz
+
 from ckanext.toolbelt.decorators import Collector
 
 CONFIG_ALLOW_USER = "ckanext.check_link.user_can_check_url"

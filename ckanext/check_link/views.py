@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from flask import Blueprint
-import ckan.plugins.toolkit as tk
 import ckan.authz as authz
+import ckan.plugins.toolkit as tk
 from ckan.lib.helpers import Page
+from flask import Blueprint
 
 CONFIG_BASE_TEMPLATE = "ckanext.check_link.report.base_template"
 CONFIG_REPORT_URL = "ckanext.check_link.report.url"
