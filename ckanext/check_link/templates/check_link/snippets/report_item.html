@@ -24,6 +24,16 @@ report
         </p>
     {% endblock resource %}
 
+    {% block checked_at %}
+        <p class="h5">
+            {{ _("Date of check:") }}
+            <date>
+                {{ h.render_datetime(report.created_at, None, true) }}
+            </date>
+            [{{ h.time_ago_from_timestamp(report.created_at) }}]
+        </p>
+    {% endblock checked_at %}
+
     {% block state %}
         <p class="h5">
             {{ _("State:") }}
