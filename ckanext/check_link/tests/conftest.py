@@ -6,7 +6,6 @@ from ckan.tests.factories import CKANFactory, fake, Resource
 from ckanext.check_link.model import Report
 
 
-
 @pytest.fixture
 def clean_db(reset_db, migrate_db_for):
     reset_db()

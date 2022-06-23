@@ -41,7 +41,7 @@ class Report(Base):
 
     resource = relationship(
         model.Resource,
-        backref=backref("check_link_report", cascade="all, delete", uselist=False),
+        backref=backref("check_link_report", cascade="all, delete-orphan", uselist=False),
     )
 
 
