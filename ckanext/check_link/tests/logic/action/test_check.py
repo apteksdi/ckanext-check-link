@@ -70,6 +70,8 @@ class TestUrl:
         }
 
 
+
+
 @pytest.mark.usefixtures("with_plugins", "clean_db")
 class TestResource:
     def test_not_saved_by_defaut(self, resource, rmock):
@@ -85,3 +87,18 @@ class TestResource:
         report = call_action("check_link_report_show", resource_id=resource["id"])
         assert report["resource_id"] == resource["id"]
         assert report["package_id"] == resource["package_id"]
+
+
+@pytest.mark.usefixtures("with_plugins", "clean_db")
+class TestPackage:
+
+    def test_basic(self, resource_factory, rmock, package):
+        resource = resource_factory(package_id=package["id"])
+        rmock.head(resource["url"], status=200)
+        result = call_action("check_link_package_check", id=package["id"])
+        assert len(result) == 1
+        assert result[0]["code"] == 200
+
+    def test_empty(self, package):
+        result = call_action("check_link_package_check", id=package["id"])
+        assert result == []

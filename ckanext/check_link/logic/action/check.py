@@ -129,7 +129,7 @@ def _search_check(context, fq: str, data_dict: dict[str, Any]):
     ]
 
     if not pairs:
-        return {"reports", []}
+        return {"reports": []}
 
     patches, urls = zip(*pairs)
 
