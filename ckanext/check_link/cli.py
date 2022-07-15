@@ -48,6 +48,15 @@ def check_packages(include_draft: bool, include_private: bool, ids: tuple[str, .
 
     with click.progressbar(q, length=q.count()) as bar:
         for pkg in bar:
-            check(context.copy(), {"id": pkg.id, "save": True, "clear_available": True})
+            check(
+                context.copy(),
+                {
+                    "id": pkg.id,
+                    "save": True,
+                    "clear_available": True,
+                    "include_drafts": include_draft,
+                    "include_private": include_private,
+                },
+            )
 
     click.secho("Done", fg="green")
