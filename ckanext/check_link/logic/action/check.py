@@ -118,7 +118,7 @@ def _search_check(context, fq: str, data_dict: dict[str, Any]):
         "fq": fq,
         "start": data_dict["start"],
         "include_drafts": data_dict["include_drafts"],
-        "include_deleted": data_dict["include_deleted"],
+        # "include_deleted": data_dict["include_deleted"],
         "include_private": data_dict["include_private"],
     }
 

@@ -32,7 +32,7 @@ def base_search_check(boolean_validator, default, int_validator):
         "save": [default(False), boolean_validator],
         "clear_available": [default(False), boolean_validator],
         "include_drafts": [default(False), boolean_validator],
-        "include_deleted": [default(False), boolean_validator],
+        # "include_deleted": [default(False), boolean_validator],
         "include_private": [default(False), boolean_validator],
         "start": [default(0), int_validator],
         "rows": [default(10), int_validator],
