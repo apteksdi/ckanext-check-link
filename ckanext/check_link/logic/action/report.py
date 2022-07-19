@@ -25,6 +25,10 @@ def report_save(context, data_dict):
         sess.add(report)
     else:
         report = sess.query(Report).filter(Report.id == existing["id"]).one()
+        # this line update `created_at` value. Consider removing old report and
+        # creating a brand new one instead, as it would be nice to have ID
+        # regenerated as well
+        report.touch()
         for k, v in data_dict.items():
             if k == "id":
                 continue

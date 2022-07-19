@@ -50,6 +50,9 @@ class Report(Base):
 
     UniqueConstraint(url, resource_id)
 
+    def touch(self):
+        self.created_at = datetime.utcnow()
+
     def dictize(self, context: dict[str, Any]) -> dict[str, Any]:
         result = table_dictize(self, context, package_id=self.package_id)
 

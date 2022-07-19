@@ -1,5 +1,6 @@
 pytest-ckan
 pytest-factoryboy
 responses
-aioresponses
+# aioresponses
+pytest-httpx
 pytest-asyncio
