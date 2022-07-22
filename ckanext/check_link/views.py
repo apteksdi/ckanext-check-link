@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Any, Optional
 
 import ckan.authz as authz
 import ckan.plugins.toolkit as tk
@@ -46,6 +47,10 @@ def report():
         },
     )
 
+    def pager_url(*args: Any, **kwargs: Any):
+        return tk.url_for("check_link.report", **kwargs)
+
+
     base_template = tk.config.get(CONFIG_BASE_TEMPLATE, DEFAULT_BASE_TEMPLATE)
     return tk.render(
         "check_link/report.html",
@@ -53,6 +58,7 @@ def report():
             "base_template": base_template,
             "page": Page(
                 reports["results"],
+                url=pager_url,
                 page=page,
                 item_count=reports["count"],
                 items_per_page=per_page,

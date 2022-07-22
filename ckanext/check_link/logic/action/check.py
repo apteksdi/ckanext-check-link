@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+import logging
 from itertools import islice
 from typing import Any, Iterable
 
@@ -12,6 +12,7 @@ from ckanext.toolbelt.decorators import Collector
 
 from .. import schema
 
+log = logging.getLogger(__name__)
 action, get_actions = Collector("check_link").split()
 
 
@@ -20,10 +21,15 @@ action, get_actions = Collector("check_link").split()
 def url_check(context, data_dict):
     tk.check_access("check_link_url_check", context, data_dict)
 
-    try:
-        result = check_all(map(Link, data_dict["url"]))
-    except ValueError:
-        raise tk.ValidationError({"url": ["Must be a valid URL"]})
+    links = []
+    for url in data_dict["url"]:
+        try:
+            links.append(Link(url))
+        except ValueError as e:
+            if data_dict["skip_invalid"]:
+                log.debug("Skipping invalid url: %s", url)
+            else:
+                raise tk.ValidationError({"url": ["Must be a valid URL"]}) from e
 
     reports = [
         {
@@ -33,7 +39,7 @@ def url_check(context, data_dict):
             "reason": link.reason,
             "explanation": link.details,
         }
-        for link in result
+        for link in check_all(links)
     ]
 
     if data_dict["save"]:
@@ -126,6 +132,7 @@ def _search_check(context, fq: str, data_dict: dict[str, Any]):
         ({"resource_id": res["id"], "package_id": pkg["id"]}, res["url"])
         for pkg in islice(_iterate_search(context, params), data_dict["rows"])
         for res in pkg["resources"]
+        if res["url"]
     ]
 
     if not pairs:
@@ -133,7 +140,7 @@ def _search_check(context, fq: str, data_dict: dict[str, Any]):
 
     patches, urls = zip(*pairs)
 
-    result = tk.get_action("check_link_url_check")(context, {"url": urls})
+    result = tk.get_action("check_link_url_check")(context, {"url": urls, "skip_invalid": data_dict["skip_invalid"]})
 
     reports = [dict(report, **patch) for patch, report in zip(patches, result)]
     if data_dict["save"]:

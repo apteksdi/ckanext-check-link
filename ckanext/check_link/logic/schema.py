@@ -14,6 +14,7 @@ def url_check(
         "patch": [default("{}"), convert_to_json_if_string],
         "save": [default(False), boolean_validator],
         "clear_available": [default(False), boolean_validator],
+        "skip_invalid": [default(False), boolean_validator],
     }
 
 
@@ -31,6 +32,7 @@ def base_search_check(boolean_validator, default, int_validator):
     return {
         "save": [default(False), boolean_validator],
         "clear_available": [default(False), boolean_validator],
+        "skip_invalid": [default(False), boolean_validator],
         "include_drafts": [default(False), boolean_validator],
         # "include_deleted": [default(False), boolean_validator],
         "include_private": [default(False), boolean_validator],
