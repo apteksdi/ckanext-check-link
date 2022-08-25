@@ -115,15 +115,18 @@ def check_resources(ids: tuple[str, ...], delay: float):
 
         for res in bar:
             bar.label = f"Current: {res.id}. Overview({total} total): {overview}"
-            result = check(
-                context.copy(),
-                {
-                    "save": True,
-                    "clear_available": True,
-                    "id": res.id,
-                    "skip_invalid": True,
-                },
-            )
+            try:
+                result = check(
+                    context.copy(),
+                    {
+                        "save": True,
+                        "clear_available": True,
+                        "id": res.id,
+                    },
+                )
+            except tk.ValidationError as e:
+                log.error("Cannot check %s: %s", res.id, e)
+                result = {"state": "exception"}
 
             stats[result["state"]] += 1
             overview = ", ".join(f"{click.style(k,  underline=True)}: {click.style(str(v),bold=True)}" for k, v in stats.items()) or "not available"
