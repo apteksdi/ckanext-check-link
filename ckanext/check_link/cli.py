@@ -1,14 +1,12 @@
 from __future__ import annotations
 
 import logging
-import time
 from collections import Counter
 from itertools import islice
-from typing import Any, Iterable, TypeVar
+from typing import Iterable, TypeVar
 
 import ckan.model as model
 import ckan.plugins.toolkit as tk
-import sqlalchemy as sa
 import click
 
 T = TypeVar("T")
@@ -122,6 +120,7 @@ def check_resources(ids: tuple[str, ...], delay: float):
                         "save": True,
                         "clear_available": True,
                         "id": res.id,
+                        "link_patch": {"delay": delay},
                     },
                 )
             except tk.ValidationError as e:
@@ -131,6 +130,6 @@ def check_resources(ids: tuple[str, ...], delay: float):
             stats[result["state"]] += 1
             overview = ", ".join(f"{click.style(k,  underline=True)}: {click.style(str(v),bold=True)}" for k, v in stats.items()) or "not available"
             bar.label = f"Current: {res.id}. Overview({total} total): {overview}"
-            time.sleep(delay)
+
 
     click.secho("Done", fg="green")

@@ -11,24 +11,26 @@ def url_check(
 ):
     return {
         "url": [not_missing, json_list_or_string],
-        "patch": [default("{}"), convert_to_json_if_string],
         "save": [default(False), boolean_validator],
         "clear_available": [default(False), boolean_validator],
         "skip_invalid": [default(False), boolean_validator],
+        "link_patch": [default("{}"), convert_to_json_if_string],
+
     }
 
 
 @validator_args
-def resource_check(not_missing, resource_id_exists, boolean_validator, default):
+def resource_check(not_missing, resource_id_exists, boolean_validator, default, convert_to_json_if_string):
     return {
         "id": [not_missing, resource_id_exists],
         "save": [default(False), boolean_validator],
         "clear_available": [default(False), boolean_validator],
+        "link_patch": [default("{}"), convert_to_json_if_string],
     }
 
 
 @validator_args
-def base_search_check(boolean_validator, default, int_validator):
+def base_search_check(boolean_validator, default, int_validator, convert_to_json_if_string):
     return {
         "save": [default(False), boolean_validator],
         "clear_available": [default(False), boolean_validator],
@@ -38,6 +40,7 @@ def base_search_check(boolean_validator, default, int_validator):
         "include_private": [default(False), boolean_validator],
         "start": [default(0), int_validator],
         "rows": [default(10), int_validator],
+        "link_patch": [default("{}"), convert_to_json_if_string],
     }
 
 
