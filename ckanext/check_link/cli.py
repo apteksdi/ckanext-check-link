@@ -12,6 +12,7 @@ import click
 T = TypeVar("T")
 log = logging.getLogger(__name__)
 
+
 def get_commands():
     return [check_link]
 
@@ -29,10 +30,18 @@ def check_link():
     "-p", "--include-private", is_flag=True, help="Check private packages as well"
 )
 @click.option(
-    "-c", "--chunk", help="Number of packages that processed simultaneously", default=1, type=click.IntRange(1, )
+    "-c",
+    "--chunk",
+    help="Number of packages that processed simultaneously",
+    default=1,
+    type=click.IntRange(
+        1,
+    ),
 )
 @click.argument("ids", nargs=-1)
-def check_packages(include_draft: bool, include_private: bool, ids: tuple[str, ...], chunk: int):
+def check_packages(
+    include_draft: bool, include_private: bool, ids: tuple[str, ...], chunk: int
+):
     """Check every resource inside each package.
 
     Scope can be narrowed via arbitary number of arguments, specifying
@@ -48,9 +57,7 @@ def check_packages(include_draft: bool, include_private: bool, ids: tuple[str, .
     if include_draft:
         states.append("draft")
 
-    q = model.Session.query(
-        model.Package.id
-    ).filter(
+    q = model.Session.query(model.Package.id).filter(
         model.Package.state.in_(states),
     )
 
@@ -76,11 +83,18 @@ def check_packages(include_draft: bool, include_private: bool, ids: tuple[str, .
                     "include_drafts": include_draft,
                     "include_private": include_private,
                     "skip_invalid": True,
-                    "rows": chunk
+                    "rows": chunk,
                 },
             )
             stats.update(r["state"] for r in result)
-            overview = ", ".join(f"{click.style(k,  underline=True)}: {click.style(str(v),bold=True)}" for k, v in stats.items()) or "not available"
+            overview = (
+                ", ".join(
+                    f"{click.style(k,  underline=True)}:"
+                    f" {click.style(str(v),bold=True)}"
+                    for k, v in stats.items()
+                )
+                or "not available"
+            )
             bar.label = f"Overview: {overview}"
 
     click.secho("Done", fg="green")
@@ -89,8 +103,11 @@ def check_packages(include_draft: bool, include_private: bool, ids: tuple[str, .
 def _take(seq: Iterable[T], size: int) -> list[T]:
     return list(islice(seq, size))
 
+
 @check_link.command()
-@click.option("-d", "--delay", default=0, help="Delay between requests", type=click.FloatRange(0))
+@click.option(
+    "-d", "--delay", default=0, help="Delay between requests", type=click.FloatRange(0)
+)
 @click.argument("ids", nargs=-1)
 def check_resources(ids: tuple[str, ...], delay: float):
     """Check every resource on the portal.
@@ -110,7 +127,6 @@ def check_resources(ids: tuple[str, ...], delay: float):
     total = q.count()
     overview = "Not ready yet"
     with click.progressbar(q, length=total) as bar:
-
         for res in bar:
             bar.label = f"Current: {res.id}. Overview({total} total): {overview}"
             try:
@@ -128,8 +144,14 @@ def check_resources(ids: tuple[str, ...], delay: float):
                 result = {"state": "exception"}
 
             stats[result["state"]] += 1
-            overview = ", ".join(f"{click.style(k,  underline=True)}: {click.style(str(v),bold=True)}" for k, v in stats.items()) or "not available"
+            overview = (
+                ", ".join(
+                    f"{click.style(k,  underline=True)}:"
+                    f" {click.style(str(v),bold=True)}"
+                    for k, v in stats.items()
+                )
+                or "not available"
+            )
             bar.label = f"Current: {res.id}. Overview({total} total): {overview}"
-
 
     click.secho("Done", fg="green")

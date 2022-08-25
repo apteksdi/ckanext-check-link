@@ -15,12 +15,17 @@ def url_check(
         "clear_available": [default(False), boolean_validator],
         "skip_invalid": [default(False), boolean_validator],
         "link_patch": [default("{}"), convert_to_json_if_string],
-
     }
 
 
 @validator_args
-def resource_check(not_missing, resource_id_exists, boolean_validator, default, convert_to_json_if_string):
+def resource_check(
+    not_missing,
+    resource_id_exists,
+    boolean_validator,
+    default,
+    convert_to_json_if_string,
+):
     return {
         "id": [not_missing, resource_id_exists],
         "save": [default(False), boolean_validator],
@@ -30,7 +35,9 @@ def resource_check(not_missing, resource_id_exists, boolean_validator, default, 
 
 
 @validator_args
-def base_search_check(boolean_validator, default, int_validator, convert_to_json_if_string):
+def base_search_check(
+    boolean_validator, default, int_validator, convert_to_json_if_string
+):
     return {
         "save": [default(False), boolean_validator],
         "clear_available": [default(False), boolean_validator],

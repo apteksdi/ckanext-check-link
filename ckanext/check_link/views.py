@@ -50,7 +50,6 @@ def report():
     def pager_url(*args: Any, **kwargs: Any):
         return tk.url_for("check_link.report", **kwargs)
 
-
     base_template = tk.config.get(CONFIG_BASE_TEMPLATE, DEFAULT_BASE_TEMPLATE)
     return tk.render(
         "check_link/report.html",

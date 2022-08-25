@@ -61,7 +61,9 @@ def resource_check(context, data_dict):
     tk.check_access("check_link_resource_check", context, data_dict)
     resource = tk.get_action("resource_show")(context, data_dict)
 
-    result = tk.get_action("check_link_url_check")(context, {"url": [resource["url"]], "link_patch": data_dict["link_patch"]})
+    result = tk.get_action("check_link_url_check")(
+        context, {"url": [resource["url"]], "link_patch": data_dict["link_patch"]}
+    )
 
     report = dict(
         result[0], resource_id=resource["id"], package_id=resource["package_id"]
@@ -147,7 +149,14 @@ def _search_check(context, fq: str, data_dict: dict[str, Any]):
 
     patches, urls = zip(*pairs)
 
-    result = tk.get_action("check_link_url_check")(context, {"url": urls, "skip_invalid": data_dict["skip_invalid"], "link_patch": data_dict["link_patch"]})
+    result = tk.get_action("check_link_url_check")(
+        context,
+        {
+            "url": urls,
+            "skip_invalid": data_dict["skip_invalid"],
+            "link_patch": data_dict["link_patch"],
+        },
+    )
 
     reports = [dict(report, **patch) for patch, report in zip(patches, result)]
     if data_dict["save"]:
