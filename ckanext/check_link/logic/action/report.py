@@ -95,6 +95,7 @@ def report_search(context, data_dict):
         q = q.filter(Report.state.in_(data_dict["include_state"]))
 
     count = q.count()
+    q = q.order_by(Report.created_at.desc())
     q = q.limit(data_dict["limit"]).offset(data_dict["offset"])
 
     return {

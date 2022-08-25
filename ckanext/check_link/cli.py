@@ -110,21 +110,24 @@ def check_resources(ids: tuple[str, ...], delay: float):
 
     stats = Counter()
     total = q.count()
+    overview = "Not ready yet"
     with click.progressbar(q, length=total) as bar:
 
         for res in bar:
+            bar.label = f"Current: {res.id}. Overview({total} total): {overview}"
             result = check(
                 context.copy(),
                 {
                     "save": True,
                     "clear_available": True,
                     "id": res.id,
+                    "skip_invalid": True,
                 },
             )
 
             stats[result["state"]] += 1
             overview = ", ".join(f"{click.style(k,  underline=True)}: {click.style(str(v),bold=True)}" for k, v in stats.items()) or "not available"
-            bar.label = f"Overview({total} total): {overview}"
+            bar.label = f"Current: {res.id}. Overview({total} total): {overview}"
             time.sleep(delay)
 
     click.secho("Done", fg="green")
