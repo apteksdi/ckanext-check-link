@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.14](https://github.com/DataShades/ckanext-check-link/compare/v0.0.13...v0.0.14) (2022-08-26)
+
+
+### Features
+
+* delete reports CLI command ([97a1648](https://github.com/DataShades/ckanext-check-link/commit/97a164857fa581170707a94a941a5434a1648138))
+
 ### [0.0.10](https://github.com/DataShades/ckanext-check-link/compare/v0.0.9...v0.0.10) (2022-07-28)
 
 
