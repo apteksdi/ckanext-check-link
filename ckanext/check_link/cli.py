@@ -8,6 +8,7 @@ from typing import Iterable, TypeVar
 import ckan.model as model
 import ckan.plugins.toolkit as tk
 import click
+from .model import Report
 
 T = TypeVar("T")
 log = logging.getLogger(__name__)
@@ -155,3 +156,24 @@ def check_resources(ids: tuple[str, ...], delay: float):
             bar.label = f"Current: {res.id}. Overview({total} total): {overview}"
 
     click.secho("Done", fg="green")
+
+
+@check_link.command()
+@click.option("-o", "--orphans-only", is_flag=True, help="Only drop reports that point to an unexisting resource")
+def delete_reports(orphans_only: bool):
+    """Delete check-link reports.
+    """
+    q = model.Session.query(Report)
+    if orphans_only:
+        q = q.outerjoin(model.Resource, Report.resource_id == model.Resource.id).filter(
+            Report.resource_id.is_not(None),
+            model.Resource.id.is_(None) | (model.Resource.state != "active")
+        )
+
+    user = tk.get_action("get_site_user")({"ignore_auth": True}, {})
+    context = {"user": user["name"]}
+
+    action = tk.get_action("check_link_report_delete")
+    with click.progressbar(q, length=q.count()) as bar:
+        for report in bar:
+            action(context.copy(), {"id": report.id})
