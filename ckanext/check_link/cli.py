@@ -166,7 +166,7 @@ def delete_reports(orphans_only: bool):
     q = model.Session.query(Report)
     if orphans_only:
         q = q.outerjoin(model.Resource, Report.resource_id == model.Resource.id).filter(
-            Report.resource_id.is_not(None),
+            Report.resource_id.isnot(None),
             model.Resource.id.is_(None) | (model.Resource.state != "active")
         )
 
