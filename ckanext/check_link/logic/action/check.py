@@ -24,7 +24,7 @@ action, get_actions = Collector("check_link").split()
 def url_check(context, data_dict):
     tk.check_access("check_link_url_check", context, data_dict)
     timeout: int = tk.asint(tk.config.get(CONFIG_TIMEOUT, DEFAULT_TIMEOUT))
-    links = []
+    links: list[Link] = []
 
     kwargs: dict[str, Any] = data_dict["link_patch"]
     kwargs.setdefault("timeout", timeout)
