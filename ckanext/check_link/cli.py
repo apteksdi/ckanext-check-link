@@ -39,9 +39,16 @@ def check_link():
         1,
     ),
 )
+@click.option(
+    "-d", "--delay", default=0, help="Delay between requests", type=click.FloatRange(0)
+)
+@click.option(
+    "-t", "--timeout", default=10, help="Request timeout", type=click.FloatRange(0)
+)
 @click.argument("ids", nargs=-1)
 def check_packages(
-    include_draft: bool, include_private: bool, ids: tuple[str, ...], chunk: int
+        include_draft: bool, include_private: bool, ids: tuple[str, ...], chunk: int,
+        delay: float, timeout: float
 ):
     """Check every resource inside each package.
 
@@ -85,6 +92,7 @@ def check_packages(
                     "include_private": include_private,
                     "skip_invalid": True,
                     "rows": chunk,
+                    "link_patch": {"delay": delay, "timeout": timeout},
                 },
             )
             stats.update(r["state"] for r in result)
@@ -109,8 +117,11 @@ def _take(seq: Iterable[T], size: int) -> list[T]:
 @click.option(
     "-d", "--delay", default=0, help="Delay between requests", type=click.FloatRange(0)
 )
+@click.option(
+    "-t", "--timeout", default=10, help="Request timeout", type=click.FloatRange(0)
+)
 @click.argument("ids", nargs=-1)
-def check_resources(ids: tuple[str, ...], delay: float):
+def check_resources(ids: tuple[str, ...], delay: float, timeout: float):
     """Check every resource on the portal.
 
     Scope can be narrowed via arbitary number of arguments, specifying
@@ -137,7 +148,7 @@ def check_resources(ids: tuple[str, ...], delay: float):
                         "save": True,
                         "clear_available": True,
                         "id": res.id,
-                        "link_patch": {"delay": delay},
+                        "link_patch": {"delay": delay, "timeout": timeout},
                     },
                 )
             except tk.ValidationError as e:
