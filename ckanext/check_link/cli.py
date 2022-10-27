@@ -105,6 +105,7 @@ def check_packages(
                 or "not available"
             )
             bar.label = f"Overview: {overview}"
+            bar.update(chunk)
 
     click.secho("Done", fg="green")
 
