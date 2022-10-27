@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.18](https://github.com/DataShades/ckanext-check-link/compare/v0.0.17...v0.0.18) (2022-10-27)
+
+
+### Bug Fixes
+
+* display progress during check-packages ([be3e3e2](https://github.com/DataShades/ckanext-check-link/commit/be3e3e27eda732ec6e8db68fdd008499ab7eae7f))
+
 ### [0.0.17](https://github.com/DataShades/ckanext-check-link/compare/v0.0.16...v0.0.17) (2022-10-27)
 
 ### [0.0.15](https://github.com/DataShades/ckanext-check-link/compare/v0.0.14...v0.0.15) (2022-09-19)
