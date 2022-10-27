@@ -7,10 +7,9 @@ from ckan.lib.helpers import Page
 from flask import Blueprint
 
 CONFIG_BASE_TEMPLATE = "ckanext.check_link.report.base_template"
-CONFIG_REPORT_URL = "ckanext.check_link.report.url"
-
-
 DEFAULT_BASE_TEMPLATE = "check_link/base_admin.html"
+
+CONFIG_REPORT_URL = "ckanext.check_link.report.url"
 DEFAULT_REPORT_URL = "/check-link/report/global"
 
 
