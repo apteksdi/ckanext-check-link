@@ -10,6 +10,19 @@
 
 
 {% block check_link_content %}
+    <div class="content-actions">
+        <ul class="list-unstyled">
+            {% block check_link_actions %}
+                {% block check_link_action_download_csv %}
+                    <li>
+                        <a class="btn btn-primary" href="{{ h.remove_url_param("format", null, "csv") }}">
+                            {{ _("Download as CSV") }}
+                        </a>
+                    </li>
+                {% endblock check_link_action_download_csv %}
+            {% endblock check_link_actions %}
+        </ul>
+    </div>
 
     <div class="check-link-reports">
         {% for report in page %}
