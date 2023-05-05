@@ -3,7 +3,7 @@ from __future__ import annotations
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 
-from . import cli, views, helpers
+from . import cli, helpers, views
 from .logic import action, auth
 
 

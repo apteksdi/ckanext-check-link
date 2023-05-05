@@ -1,5 +1,6 @@
-import ckan.model as model
 import pytest
+
+import ckan.model as model
 
 from ckanext.check_link.model import Report
 

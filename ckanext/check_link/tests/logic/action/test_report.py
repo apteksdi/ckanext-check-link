@@ -1,5 +1,6 @@
-import ckan.plugins.toolkit as tk
 import pytest
+
+import ckan.plugins.toolkit as tk
 from ckan.tests.helpers import call_action
 
 

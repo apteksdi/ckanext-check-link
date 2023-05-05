@@ -1,13 +1,16 @@
 from __future__ import annotations
-from typing import Any, Iterable, TYPE_CHECKING
-import datetime
+
 import csv
-from ckan import model
+import datetime
+from typing import TYPE_CHECKING, Any, Iterable
+
+from flask import Blueprint
+
 import ckan.authz as authz
 import ckan.plugins.toolkit as tk
-from ckan.lib.helpers import Page
-from flask import Blueprint
+from ckan import model
 from ckan.common import streaming_response
+from ckan.lib.helpers import Page
 
 if TYPE_CHECKING:
     from ckan.types import Context
@@ -53,12 +56,16 @@ def report():
     fmt = tk.request.args.get("format")
     if fmt == "csv":
         resp = streaming_response(
-            _stream_csv(_iterate_resuts("check_link_report_search", params, {"user": tk.g.user})),
+            _stream_csv(
+                _iterate_resuts("check_link_report_search", params, {"user": tk.g.user})
+            ),
             mimetype="text/csv",
             with_context=True,
         )
         today = datetime.date.today()
-        resp.headers["content-disposition"] = f'attachment; filename="VPSDDLinkReport-{today:%d%m%Y}.csv"'
+        resp.headers[
+            "content-disposition"
+        ] = f'attachment; filename="VPSDDLinkReport-{today:%d%m%Y}.csv"'
         return resp
 
     try:
@@ -91,9 +98,11 @@ def report():
         },
     )
 
+
 class _FakeBuffer:
     def write(self, value):
         return value
+
 
 def _stream_csv(reports):
     writer = csv.writer(_FakeBuffer())
@@ -106,19 +115,31 @@ def _stream_csv(reports):
         if owner_org not in _org_cache:
             _org_cache[owner_org] = model.Group.get(owner_org)
 
-        yield writer.writerow([
-            report["details"]["package"]["title"],
-            report["details"]["resource"]["name"] or "Unknown",
-            _org_cache[owner_org] and _org_cache[owner_org].title,
-            report["state"],
-            report["details"]["explanation"],
-            tk.url_for("resource.read", id=report["package_id"], resource_id=report["resource_id"], _external=True),
-            tk.h.render_datetime(report["created_at"], None, True)
-        ])
+        yield writer.writerow(
+            [
+                report["details"]["package"]["title"],
+                report["details"]["resource"]["name"] or "Unknown",
+                _org_cache[owner_org] and _org_cache[owner_org].title,
+                report["state"],
+                report["details"]["explanation"],
+                tk.url_for(
+                    "resource.read",
+                    id=report["package_id"],
+                    resource_id=report["resource_id"],
+                    _external=True,
+                ),
+                tk.h.render_datetime(report["created_at"], None, True),
+            ]
+        )
 
 
-def _iterate_resuts(action: str, params: dict[str, Any], context: Context | None = None, offset: int = 0, chunk_size: int = 10) -> Iterable[dict[str, Any]]:
-
+def _iterate_resuts(
+    action: str,
+    params: dict[str, Any],
+    context: Context | None = None,
+    offset: int = 0,
+    chunk_size: int = 10,
+) -> Iterable[dict[str, Any]]:
     while True:
         result = tk.get_action(action)(
             context or {},

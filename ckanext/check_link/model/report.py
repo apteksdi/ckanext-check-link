@@ -1,12 +1,8 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, Iterable, Optional
+from typing import Any, Optional
 
-import ckan.model as model
-from ckan.lib.dictization import table_dictize
-from ckan.lib.dictization.model_dictize import package_dictize, resource_dictize
-from ckan.model.types import make_uuid
 from sqlalchemy import (
     Column,
     DateTime,
@@ -19,6 +15,11 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import backref, relationship
 from typing_extensions import Self
+
+import ckan.model as model
+from ckan.lib.dictization import table_dictize
+from ckan.lib.dictization.model_dictize import resource_dictize
+from ckan.model.types import make_uuid
 
 from .base import Base
 

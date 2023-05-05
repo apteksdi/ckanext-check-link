@@ -5,9 +5,11 @@ from collections import Counter
 from itertools import islice
 from typing import Iterable, TypeVar
 
+import click
+
 import ckan.model as model
 import ckan.plugins.toolkit as tk
-import click
+
 from .model import Report
 
 T = TypeVar("T")
@@ -47,8 +49,12 @@ def check_link():
 )
 @click.argument("ids", nargs=-1)
 def check_packages(
-        include_draft: bool, include_private: bool, ids: tuple[str, ...], chunk: int,
-        delay: float, timeout: float
+    include_draft: bool,
+    include_private: bool,
+    ids: tuple[str, ...],
+    chunk: int,
+    delay: float,
+    timeout: float,
 ):
     """Check every resource inside each package.
 
@@ -171,15 +177,19 @@ def check_resources(ids: tuple[str, ...], delay: float, timeout: float):
 
 
 @check_link.command()
-@click.option("-o", "--orphans-only", is_flag=True, help="Only drop reports that point to an unexisting resource")
+@click.option(
+    "-o",
+    "--orphans-only",
+    is_flag=True,
+    help="Only drop reports that point to an unexisting resource",
+)
 def delete_reports(orphans_only: bool):
-    """Delete check-link reports.
-    """
+    """Delete check-link reports."""
     q = model.Session.query(Report)
     if orphans_only:
         q = q.outerjoin(model.Resource, Report.resource_id == model.Resource.id).filter(
             Report.resource_id.isnot(None),
-            model.Resource.id.is_(None) | (model.Resource.state != "active")
+            model.Resource.id.is_(None) | (model.Resource.state != "active"),
         )
 
     user = tk.get_action("get_site_user")({"ignore_auth": True}, {})

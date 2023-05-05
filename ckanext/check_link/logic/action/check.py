@@ -1,10 +1,12 @@
 from __future__ import annotations
+
 import logging
 from itertools import islice
 from typing import Any, Iterable
 
-import ckan.plugins.toolkit as tk
 from check_link import Link, check_all
+
+import ckan.plugins.toolkit as tk
 from ckan.lib.search.query import solr_literal
 from ckan.logic import validate
 
