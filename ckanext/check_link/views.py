@@ -33,11 +33,15 @@ CSV_COLUMNS = [
 
 bp = Blueprint("check_link", __name__)
 
+_initialized = False
+
 
 def get_blueprints():
+    global _initialized
     report_url = tk.config.get(CONFIG_REPORT_URL, DEFAULT_REPORT_URL)
-    if report_url:
+    if not _initialized and report_url:
         bp.add_url_rule(report_url, view_func=report)
+        _initialized = True
 
     return [bp]
 
