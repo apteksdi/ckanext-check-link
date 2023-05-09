@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1](https://github.com/DataShades/ckanext-check-link/compare/v0.1.0...v0.1.1) (2023-05-09)
+
+
+### Bug Fixes
+
+* do not duplicate url rules ([214524e](https://github.com/DataShades/ckanext-check-link/commit/214524eb9d3095852e9bccdf9cc0724b6ee1dd1f))
+
 ## [0.1.0](https://github.com/DataShades/ckanext-check-link/compare/v0.0.18...v0.1.0) (2023-05-05)
 
 
