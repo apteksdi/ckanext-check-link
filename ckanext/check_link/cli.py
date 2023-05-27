@@ -132,7 +132,7 @@ def check_resources(ids: tuple[str, ...], delay: float, timeout: float):
     """Check every resource on the portal.
 
     Scope can be narrowed via arbitary number of arguments, specifying
-    resource's ID or name.
+    resource's ID.
     """
     user = tk.get_action("get_site_user")({"ignore_auth": True}, {})
     context = {"user": user["name"]}

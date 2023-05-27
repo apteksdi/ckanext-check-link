@@ -95,7 +95,38 @@ $ ckan check-link check-packages pkg-id-one pkg-name-two
 
 ```
 
+### `check-resources`
+Check every resource on the portal.
+
+Scope can be narrowed via arbitary number of arguments, specifying resource's ID
+
+### `delete-reports`
+Delete check-link reports.
+
+```sh
+# delete all reports
+$ ckan check-link delete-reports
+
+# drop reports that point to an unexisting resource
+$ ckan check-link delete-reports --orphans-only
+```
+
+Scope can be narrowed via arbitary number of arguments, specifying resource's ID
+
 ## API
+
+### `check_link_url_check`
+### `check_link_resource_check`
+### `check_link_package_check`
+### `check_link_organization_check`
+### `check_link_group_check`
+### `check_link_user_check`
+### `check_link_search_check`
+
+### `check_link_report_save`
+### `check_link_report_show`
+### `check_link_report_search`
+### `check_link_report_delete`
 
 TBA
 
