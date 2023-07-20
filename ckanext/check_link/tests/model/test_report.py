@@ -8,13 +8,17 @@ from ckanext.check_link.model import Report
 @pytest.mark.usefixtures("with_plugins", "clean_db")
 class TestReport:
     def test_removed_with_resource(self, resource, faker):
+        res = model.Resource.get(resource["id"])
+
         report = Report(url=faker.url(), resource_id=resource["id"], state="unknown")
         model.Session.add(report)
         model.Session.commit()
 
         assert report.id
 
-        model.Session.delete(model.Resource.get(resource["id"]))
+        res = model.Resource.get(resource["id"])
+
+        model.Session.delete(res)
         model.Session.commit()
         assert not model.Session.query(Report).filter_by(id=report.id).one_or_none()
         assert not Report.by_resource_id(resource["id"])
