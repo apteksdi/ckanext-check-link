@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.2](https://github.com/DataShades/ckanext-check-link/compare/v0.1.1...v0.1.2) (2023-07-20)
+
+
+### Features
+
+* delete reports when resource deleted via `ckanext.check_link.remove_reports_when_resource_deleted` ([0e3d0a9](https://github.com/DataShades/ckanext-check-link/commit/0e3d0a987c8d7d8daed627586867439adc26d5f5))
+
+
+### Bug Fixes
+
+* add cascade removal of reports ([1a39d7b](https://github.com/DataShades/ckanext-check-link/commit/1a39d7b07318336ba2fd42f1019ec51ad87c15de))
+
 ### [0.1.1](https://github.com/DataShades/ckanext-check-link/compare/v0.1.0...v0.1.1) (2023-05-09)
 
 
