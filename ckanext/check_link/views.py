@@ -22,13 +22,16 @@ CONFIG_REPORT_URL = "ckanext.check_link.report.url"
 DEFAULT_REPORT_URL = "/check-link/report/global"
 
 CSV_COLUMNS = [
-    "Data Record title",
-    "Data Resource title",
-    "Organisation",
-    "State",
-    "Error type",
-    "Link to Data resource",
-    "Date and time checked",
+    "Judul Dataset",
+    "ID Dataset",
+    "Judul File Resources",
+    "ID Resources",
+    "Instansi",
+    "Status",
+    "Tipe Error",
+    "URL",
+    "Link Data Resource Portal SDI",
+    "Waktu Pemeriksaan",
 ]
 
 bp = Blueprint("check_link", __name__)
@@ -122,10 +125,13 @@ def _stream_csv(reports):
         yield writer.writerow(
             [
                 report["details"]["package"]["title"],
+                report["details"]["package"]["id"],
                 report["details"]["resource"]["name"] or "Unknown",
+                report["details"]["resource"]["id"],
                 _org_cache[owner_org] and _org_cache[owner_org].title,
                 report["state"],
                 report["details"]["explanation"],
+                report["details"]["resource"]["url"],
                 tk.url_for(
                     "resource.read",
                     id=report["package_id"],

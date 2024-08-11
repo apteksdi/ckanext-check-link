@@ -16,7 +16,7 @@
                 {% block check_link_action_download_csv %}
                     <li>
                         <a class="btn btn-primary" href="{{ h.remove_url_param("format", null, "csv") }}">
-                            {{ _("Download as CSV") }}
+                            {{ _("Download file CSV") }}
                         </a>
                     </li>
                 {% endblock check_link_action_download_csv %}
@@ -31,7 +31,7 @@
             </div>
         {% else %}
             <p class="text-center text-muted">
-                {{ _("At the moment there are no available reports") }}
+                {{ _("Pada saat ini belum tersedia report") }}
             </p>
         {% endfor %}
     </div>
@@ -45,33 +45,33 @@
 {% block check_link_help_text %}
     {% trans %}
     <p>
-        Brief overview of the current state of the links within the portal.
+        Ikhtisar singkat tentang status link resource dalam portal SDI saat ini.
     </p>
 
     <p>
-        Possible states are:
+        Kemungkinan keadaannya adalah:
 
         <dl>
             <dt>Unknown</dt>
-            <dd>Link has not been checked yet</dd>
+            <dd>Link belum diperiksa</dd>
 
             <dt>Available</dt>
-            <dd>Link is available</dd>
+            <dd>Link tersedia</dd>
 
             <dt>Moved</dt>
-            <dd>Link contains a redirect to the differens URL</dd>
+            <dd>Link berisi pengalihan ke URL yang berbeda</dd>
 
             <dt>Missing</dt>
-            <dd>Link points to the page that does not exist</dd>
+            <dd>Link menunjuk ke halaman yang tidak ada</dd>
 
             <dt>Protected</dt>
-            <dd>Link points to the page that requires authentication</dd>
+            <dd>Link mengarah ke laman yang memerlukan autentikasi</dd>
 
             <dt>Invalid</dt>
-            <dd>Link points to an existing location, but requests are rejected</dd>
+            <dd>Link menunjuk ke lokasi yang ada, namun permintaan ditolak</dd>
 
             <dt>Error</dt>
-            <dd>Link cannot be checked because it mailformed or points to an unexisting location</dd>
+            <dd>Link tidak dapat diperiksa karena berbentuk surat atau menunjuk ke lokasi yang tidak ada</dd>
         </dl>
     </p>
     {% endtrans %}
